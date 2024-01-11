@@ -37,14 +37,17 @@ exports.sendCivilMailConfirmation = async (req, res) =>{
 
         let allCompanions='';
         let companionsNumber = 0;
-        if(companions.length > 0) {
-            companions.forEach(companion => {
-
-                allCompanions += "\n--> "+companion.type+" "+companion.firstname+" "+companion.lastname
-            })
-
-            companionsNumber = companions.length;
+        if(companions){
+            if(companions.length > 0) {
+                companions.forEach(companion => {
+    
+                    allCompanions += "\n--> "+companion.type+" "+companion.firstname+" "+companion.lastname
+                })
+    
+                companionsNumber = companions.length;
+            }
         }
+
 
 
         finalMessage += willBePresentOrNot;
@@ -67,8 +70,6 @@ exports.sendCivilMailConfirmation = async (req, res) =>{
 
         finalMessage += "\n\n"+firstname+" "+lastname+ "\n"+email;;
 
-        console.log(finalMessage);
-
         const object = "Confirmation mariage civil | "+firstname+" "+lastname;
 
         const info = await transporter.sendMail(
@@ -80,19 +81,23 @@ exports.sendCivilMailConfirmation = async (req, res) =>{
             }
         );
 
+        if(isPresent === 'Non'){
+            return res.status(201).json({
+                status : "success",
+                message:"Votre message a bien été envoyé."
+            })
+        }
+
         return res.status(201).json({
             status : "success",
-            data : "",
-            message : "Votre message a été envoyé avec succès !"
+            message:"Votre présence pour le mariage civil a bien été confirmée."
         })
 
     } catch (e){
-        console.log(e)
         return res.status(500).json(
             {
                 status : "error",
-                data : null,
-                message : "Erreur lors de l'envois, veuillez re-essayez plus tard"
+                message : "Erreur lors de l'envois. Vous pouvez re-essayer plus tard et si cela persite contactez nous directement via la page de contact"
             }
         )
     }
@@ -100,8 +105,6 @@ exports.sendCivilMailConfirmation = async (req, res) =>{
 }
 
 exports.sendReligiousMailConfirmation = async (req, res) =>{
-
-    console.log(req.body)
 
     try{
         const { 
@@ -152,13 +155,23 @@ exports.sendReligiousMailConfirmation = async (req, res) =>{
             }
         );
 
+        if(isPresent === 'Non'){
+            return res.status(201).json({
+                status : "success",
+                message:"Votre message a bien été envoyé."
+            })
+        }
+
+        return res.status(201).json({
+            status : "success",
+            message:"Votre présence pour le mariage réligieux a bien été confirmée."
+        })
+
     } catch (e){
-        console.log(e)
         return res.status(500).json(
             {
                 status : "error",
-                data : null,
-                message : "Erreur lors de l'envois, veuillez re-essayez plus tard"
+                message : "Erreur lors de l'envois. Vous pouvez re-essayer plus tard et si cela persite contactez nous directement via la page de contact"
             }
         )
     }

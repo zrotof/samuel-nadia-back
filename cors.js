@@ -3,9 +3,10 @@ const cors = require('cors');
 //liste of url accepted on request
 const whiteList = [
     'http://localhost:4200',
-    'https://www.samuel-et-nadia.fr',
-    'https:/samuel-et-nadia.fr'
+    'https://www.nadia-et-samuel.fr',
+    'https:/nadia-et-samuel.fr'
 ];
+
 //Return true of false according to if the url calling the resources is known
 var corsOptionDelegate  = (req, callback) => {
 
